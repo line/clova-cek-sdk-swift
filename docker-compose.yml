@@ -1,0 +1,26 @@
+version: '2'
+services:
+  web:
+    build: .
+    command: ".build//release/WorldClock"
+    working_dir: /app/
+    environment:
+      PORT: 8000
+      PATH_FOR_DEBUG: ${PATH_FOR_DEBUG}
+      LOG_TYPES: ${LOG_TYPES}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      APPLICATION_ID: ${APPLICATION_ID}
+    ports:
+      - '${PORT}:8000'
+  shell:
+    build: .
+    command: bash
+    working_dir: /app/
+    environment:
+      PORT: 8000
+      PATH_FOR_DEBUG: ${PATH_FOR_DEBUG}
+      LOG_TYPES: ${LOG_TYPES}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      APPLICATION_ID: ${APPLICATION_ID}
+    ports:
+      - '${PORT}:8000'
