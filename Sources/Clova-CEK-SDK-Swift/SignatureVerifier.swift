@@ -98,6 +98,11 @@ public class SignatureVerifier {
     /// - Returns: Optional object of public key. SecKey? in macOS, UnsafeMutablePointer<EVP_PKEY> in Linux.
     private static func extractPublicKey(pem: String) -> PublicKey? {
         #if os(macOS)
+        guard #available(OSX 10.12, *) else {
+            // Unsupported
+            return nil
+        }
+
         // Strip prefixes and suffixes of X.509 certificates
         let pemString = String(pem.components(separatedBy: "\n").joined()
             .dropFirst(PEM_BEGIN_MARKER.count)
@@ -129,6 +134,10 @@ public class SignatureVerifier {
     /// - Returns: True if verified
     private static func verifyDigest(pubKey: PublicKey, body: Data, signature: Data) -> Bool {
         #if os(macOS)
+        guard #available(OSX 10.12, *) else {
+            // Unsupported
+            return false
+        }
 
         return SecKeyVerifySignature(pubKey,
                                  .rsaSignatureMessagePKCS1v15SHA256,

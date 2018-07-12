@@ -26,9 +26,10 @@ Following environment variables need to be set when it runs:
 
 To develop it with XCode, do
 ```
-$ swift package generate-xcodeproj --xcconfig-overrides settings.xcconfig
+$ swift package generate-xcodeproj
 $ open *.xcodeproj
 ```
+*Note that it requires macOS version >= 10.12 for some of Security framework methods*
 
 It has a Dockerfile which can be used by Docker. If you want to use Docker for build, execusion or deploy, install Docker.
 https://docs.docker.com/docker-for-mac/
