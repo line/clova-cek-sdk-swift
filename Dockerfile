@@ -1,5 +1,5 @@
 # Base image from https://github.com/IBM-Swift/swift-ubuntu-docker
-FROM ibmcom/swift-ubuntu:4.1
+FROM ibmcom/swift-ubuntu:4.1.3
 
 MAINTAINER LINE Corporation
 LABEL Description="Sample of CEK"
