@@ -26,9 +26,13 @@ let package = Package(
         .library(
             name: "Clova-CEK-SDK-Swift",
             targets: ["Clova-CEK-SDK-Swift"]),
+        .library(
+            name: "Clova-CEK-SDK-Swift-Kitura",
+            targets: ["Clova-CEK-SDK-Swift-Kitura"]),
     ],
     dependencies: [
         .package(url: "https://github.com/IBM-Swift/Kitura", from: "2.4.0"),
+        .package(url: "https://github.com/IBM-Swift/LoggerAPI.git", from: "1.7.3"),
         .package(url: "https://github.com/IBM-Swift/BlueCryptor.git", .upToNextMinor(from: "1.0.1")),
         .package(url: "https://github.com/IBM-Swift/SwiftyRequest.git", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/IBM-Swift/OpenSSL", .upToNextMajor(from: "1.0.0")),
@@ -36,12 +40,15 @@ let package = Package(
     targets: [
         .target(
             name: "Clova-CEK-SDK-Swift",
-            dependencies: ["Kitura", "Cryptor", "OpenSSL"]),
+            dependencies: ["Cryptor", "OpenSSL"]),
+        .target(
+            name: "Clova-CEK-SDK-Swift-Kitura",
+            dependencies: ["Kitura", "Clova-CEK-SDK-Swift"]),
         .target(
             name: "WorldClock",
-            dependencies: ["Clova-CEK-SDK-Swift", "SwiftyRequest"]),
+            dependencies: ["Clova-CEK-SDK-Swift-Kitura", "SwiftyRequest"]),
         .testTarget(
             name: "Clova-CEK-SDK-SwiftTests",
-            dependencies: ["Clova-CEK-SDK-Swift"]),
+            dependencies: ["Clova-CEK-SDK-Swift", "LoggerAPI"]),
     ]
 )

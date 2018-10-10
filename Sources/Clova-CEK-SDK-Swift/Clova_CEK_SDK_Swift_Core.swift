@@ -15,11 +15,6 @@
  **/
 
 import Foundation
-import Kitura
-import KituraNet
-import KituraContracts
-import LoggerAPI
-
 
 /// A dictionary that stores Certificates in memory per URL
 //private var signatureCEKCertChain = [String : String]()
@@ -38,7 +33,7 @@ public enum ApiPath {
     /// Internal function to only return the path string to be used for routing.
     ///
     /// - Returns: Path string to be used for routing.
-    func getPath() -> String {
+    public func getPath() -> String {
         switch self {
         case .withVerification(path: let path, applicationId: _): return path
         case .forDebug(path: let path): return path
@@ -68,6 +63,7 @@ public enum ApiPath {
     }
 }
 
+
 /// A type that implements business logis for each CEK request types
 public protocol ExtensionRequestHandler {
 
@@ -91,82 +87,42 @@ public protocol ExtensionRequestHandler {
     func sessionEndedHandler(request: CEKRequest) -> ()
 }
 
-// MARK: - Provides default implementation of sessionEndedHandler(request:)
-public extension ExtensionRequestHandler {
-    func sessionEndedHandler(request: CEKRequest) {
-    }
 
-    internal func decodeBody(body: String) throws -> CEKRequest {
-        return try JSONDecoder().decode(CEKRequest.self, from: body.data(using: .utf8)!)
-    }
-
-    // A function to parse body and invoke each handler
-    internal func handle(cekRequest: CEKRequest, request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
-        let responseHandler: (CEKResponse) -> () = { cekResponse in
-            try! response.send(data: JSONEncoder().encode(cekResponse))
-            next()
-        }
-
-        switch cekRequest.request {
-        case .launch:
-            self.launchHandler(request: cekRequest, next: responseHandler)
-        case .intent:
-            self.intentHandler(request: cekRequest, next: responseHandler)
-        case .sessionEnded:
-            self.sessionEndedHandler(request: cekRequest)
-            response.status(.OK)
-            next()
-        }
-    }
+/// A helper method to decode given message body to `CEKRequest` object.
+///
+/// - Parameter body: A raw string of the message body
+/// - Returns: A `CEKRequest` object which is decoded from the message body
+/// - throws: `DecodingError.dataCorrupted` if values requested from the payload are corrupted, or if the given data is not valid JSON.
+/// - throws: An error if any value throws an error during decoding.
+private func decodeBody(body: String) throws -> CEKRequest {
+    return try JSONDecoder().decode(CEKRequest.self, from: body.data(using: .utf8)!)
 }
 
-/// A simple struct that conforms to Error
-private struct ParseError: Swift.Error {}
-
-/// Start a webhook server for the `Clova Extension Kit (CEK)`
+/// Verify given request for given path and return `CEKRequest`.
 ///
 /// - Parameters:
-///   - port: Port to listen to
-///   - paths: API path. It would respond to https://example.com/<path>
-///   - handler: Handler for Business logic
-public func startServer(port: Int, paths: [ApiPath], handler: ExtensionRequestHandler) {
-    let router: Router = Router()
+///   - path: `ApiPath` object to specify a path to receive the request and the necessity of verification
+///   - body: A raw string of the message body
+///   - signatureCek: A signature if given
+/// - Returns: A `CEKRequest` object which is decoded from the message body
+/// - Throws: A `VerificationError` object
+public func verifyRequest(for path: ApiPath, body: String, signatureCek: String?) throws -> CEKRequest {
+    let cekRequest: CEKRequest
 
-    // Routing
-    for path in (paths.filter{$0.getPath().isEmpty == false}) {
-        router.post(path.getPath()) { (request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) in
-            guard let rawBody = try? request.readString(), let body = rawBody else {
-                response.status(.badRequest)
-                return
+    if path.needVerification() {
+        do {
+            try SignatureVerifier.verifyRequest(body: body, signatureCek: signatureCek)
+            cekRequest = try decodeBody(body: body)
+            guard let applicationId = cekRequest.context.system.application?.applicationId,
+                path.check(applicationId: applicationId) else {
+                    throw VerificationError()
             }
-
-            let cekRequest: CEKRequest
-
-            if path.needVerification() {
-                do {
-                    try SignatureVerifier.verifyRequest(body: body, headers: request.headers)
-                    cekRequest = try handler.decodeBody(body: body)
-                    guard let applicationId = cekRequest.context.system.application?.applicationId,
-                        path.check(applicationId: applicationId) else {
-                            throw VerificationError()
-                    }
-                } catch {
-                    response.status(.unauthorized)
-                    return
-                }
-            } else {
-                cekRequest = try handler.decodeBody(body: body)
-            }
-
-            do {
-                try handler.handle(cekRequest: cekRequest, request: request, response: response, next: next)
-            } catch {
-                response.status(.badRequest)
-                return
-            }
+        } catch {
+            throw VerificationError()
         }
+    } else {
+        cekRequest = try decodeBody(body: body)
     }
 
-    Kitura.addHTTPServer(onPort: port, with: router)
-    Kitura.run()
+    return cekRequest
 }

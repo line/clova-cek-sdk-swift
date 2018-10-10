@@ -2,7 +2,7 @@ version: '2'
 services:
   web:
     build: .
-    command: ".build//release/WorldClock"
+    command: ".build/release/WorldClock"
     working_dir: /app/
     environment:
       PORT: 8000

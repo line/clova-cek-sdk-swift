@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/IBM-Swift/BlueCryptor.git",
         "state": {
           "branch": null,
-          "revision": "4b10b2c97cb55d1f90b9f3a027419e71c3cef79b",
-          "version": "1.0.8"
+          "revision": "efdb770164a7d3b222d6dcb78f253633c38a2ec2",
+          "version": "1.0.10"
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/IBM-Swift/BlueSocket.git",
         "state": {
           "branch": null,
-          "revision": "85cfafa00baa149aa8b4ca1c57459d03d94940a9",
-          "version": "1.0.12"
+          "revision": "57092aba30b32ab6925ab2202672897ee5f34c40",
+          "version": "1.0.17"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/IBM-Swift/BlueSSLService.git",
         "state": {
           "branch": null,
-          "revision": "cfb35c421338d696ebfa600690073eeaf00e54ce",
-          "version": "1.0.12"
+          "revision": "763b3d88d07d3e7eb84ff537900f6db2b70fffdd",
+          "version": "1.0.17"
         }
       },
       {
@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/IBM-Swift/Kitura",
         "state": {
           "branch": null,
-          "revision": "daa071669590584b6d9c277a2e3c465a904cd0d7",
-          "version": "2.4.1"
+          "revision": "bb19ec7ef8321082a234624cc76c11a17cd88971",
+          "version": "2.5.2"
         }
       },
       {
@@ -87,8 +87,8 @@
         "repositoryURL": "https://github.com/IBM-Swift/KituraContracts.git",
         "state": {
           "branch": null,
-          "revision": "83e5cb37871dce2b1e4ca61821c20b2c654c0c1c",
-          "version": "1.0.2"
+          "revision": "8e41f3fc81b662722020754f74a8fd8c7bdbbf3b",
+          "version": "1.1.0"
         }
       },
       {
@@ -114,8 +114,8 @@
         "repositoryURL": "https://github.com/IBM-Swift/SwiftyRequest.git",
         "state": {
           "branch": null,
-          "revision": "82d49d1bde19c4acfc63c276b67c8a25ac434e52",
-          "version": "1.1.2"
+          "revision": "617de05a8bea00acf0c1fd68fd8c42aa7a42c036",
+          "version": "1.1.3"
         }
       },
       {

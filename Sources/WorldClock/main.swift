@@ -16,6 +16,7 @@
 
 import Foundation
 import Clova_CEK_SDK_Swift
+import Clova_CEK_SDK_Swift_Kitura
 import LoggerAPI
 
 // Make sure port number is defined

@@ -15,8 +15,6 @@
  **/
 
 import Foundation
-import Kitura
-import KituraNet
 import Cryptor
 
 #if os(macOS)
@@ -185,10 +183,10 @@ public class SignatureVerifier {
 
     /// A function to verify a signature. throws
     /// - Throws: VerificationError
-    public static func verifyRequest(body: String, headers: Headers) throws {
+    public static func verifyRequest(body: String, signatureCek: String?) throws {
         _ = setupChecker // Run some logic only once
 
-        guard let signatureCek = headers["SignatureCEK"],
+        guard let signatureCek = signatureCek,
             let signatureData = Data.init(base64Encoded: signatureCek) else {
             throw VerificationError()
         }

@@ -16,8 +16,6 @@
 
 import XCTest
 @testable import Clova_CEK_SDK_Swift
-@testable import Kitura
-import KituraNet
 
 class SignatureVerifierTests: XCTestCase {
 
@@ -28,12 +26,8 @@ class SignatureVerifierTests: XCTestCase {
 
         let signatureCEK = "iEW0Y9f/4HwCdHI7trS8qLY7XEiTc+lFurZHwCLKspJB0P7MMvcLpckUEIdSvRI9/GP2JfaI5J007dqKZqdmLQo+rSV9rkPnXDN8b1m2G5olQySi0WnOcOk3Dhded5Ts2zzrKINYd7VEIFnE1srN4O1UTfDOHzKcK9yV7anHuxw3X7MUU/KWdR4k3dVJz+kfQxnL2zhafUkC9X2luYah3ja0au3oLw81weizAA1+Y0FEXsx1/mhMLtZA+WLuGEKzuz3UM5V2UtfRBHKVRGnTSsUisR9U9WxUxBFo4RQJ4pK1r0uAeyszzJC4aMsLR9Ca4ysrpxb8rtLgfcurpcb3RQ=="
 
-        let headersContainer = HeadersContainer()
-        headersContainer.append("signaturecek", value: signatureCEK)
-        headersContainer.append("SignatureCEKCertChainUrl", value: "https://clova-cek-requests.line.me/cek/request-cert.crt")
-        let headers = Headers(headers: headersContainer)
         do {
-            try SignatureVerifier.verifyRequest(body: body, headers: headers)
+            try SignatureVerifier.verifyRequest(body: body, signatureCek: signatureCEK)
         } catch {
             XCTFail()
         }

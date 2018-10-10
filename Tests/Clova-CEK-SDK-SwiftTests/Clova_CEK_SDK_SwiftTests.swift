@@ -20,6 +20,7 @@ import LoggerAPI
 
 class Clova_CEK_SDK_SwiftTests: XCTestCase {
     private struct EmptyHandlers: ExtensionRequestHandler {
+        func sessionEndedHandler(request: CEKRequest) {}
         func launchHandler(request: CEKRequest, next: @escaping (CEKResponse) -> ()) {}
         func intentHandler(request: CEKRequest, next: @escaping (CEKResponse) -> ()) {}
     }
